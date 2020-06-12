@@ -1,18 +1,27 @@
 {
-  "name": "threejs",
+  "name": "demo-threejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "demo",
   "main": "index.js",
-  "dependencies": {
-    "dat.gui": "^0.7.5",
-    "jquery": "^3.3.1",
-    "stats.js": "git+https://github.com/mrdoob/stats.js.git",
-    "three": "^0.101.1"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mingz2013/demo-threejs.git"
+  },
+  "keywords": [
+    "threejs"
+  ],
+  "author": "mingz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mingz2013/demo-threejs/issues"
+  },
+  "homepage": "https://github.com/mingz2013/demo-threejs#readme",
+  "dependencies": {
+    "dat.gui": "^0.7.7",
+    "jquery": "^3.5.1",
+    "three": "^0.117.1"
+  }
 }
