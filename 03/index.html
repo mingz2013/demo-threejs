@@ -102,7 +102,7 @@
         var renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0xEEEEEE);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true; // 阴影
+        renderer.shadowMap.enabled = true; // 阴影
 
 
         $("#WebGL-output").append(renderer.domElement);
