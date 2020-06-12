@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+</head>
+<body>
+
+</body>
+
+
+<script type="text/javascript">
+
+    function initWebGL(canvas) {
+        // 获取WebGL上下文
+        var gl;
+        try {
+            gl = canvas.getContext("experimental-webgl");
+        } catch (e) {
+            var msg = "Error creating WebGL Context!:" + e.toString();
+            alert(msg);
+            throw Error(msg);
+        }
+        return gl;
+    }
+
+
+    function initViewport(gl, canvas) {
+        // 设置WebGL视口
+        gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+
+    function createSquare(gl) {
+        // 创建用于绘制正方形的顶点数据
+
+        var vertexBuffer;
+        vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        var verts = [
+            .5, .5, 0.0,
+            -.5, .5, 0.0,
+            .5, -.5, 0.0,
+            -.5, -.5, 0.0
+        ];
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+
+        var square = {
+            buffer: vertexBuffer, vertSize: 3, nVerts: 4, primtype: gl.TRIANGLE_STRIP
+        };
+
+        return square;
+    }
+
+    function initMatrices() {
+        // 设置模型视图矩阵和投影矩阵
+
+        // 正方形的变换矩阵--相对于相机沿着z轴稍微后移一些
+        modeViewMatrix = new Float32Array(
+            [
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, -3.333, 1
+            ]
+        );
+
+        // 变换矩阵(45度倾斜)
+        projectionMatrix = new Float32Array(
+            [
+                2.41421, 0, 0, 0,
+                0, 2.41421, 0, 0,
+                0, 0, -1.002002, -1,
+                0, 0, -0.2002002, 0
+            ]
+        )
+
+
+    }
+
+    // 顶点着色器和片元着色器
+    var vertexShaderSource =
+        " attribute vec3 vertexPos;\n" +
+        " uniform mat4 modelViewMatrix;\n" +
+        "uniform mat4 projectionMatrix;\n" +
+        "void main(void){\n" +
+        "// 返回变换并投影后的顶点数据\n" +
+        "gl_position = projectionMatrix * modelViewMatrix * \n" +
+        "vec4(vertexPos, 1.0);\n" +
+        "}\n";
+    var fragmentShaderSource =
+        "void main(void){\n" +
+        "// 返回像素颜色：永远输出白色\n" +
+        "gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+        "}\n";
+
+
+    function draw(gl, obj) {
+        // 绘制图元
+
+
+        // 用黑色清空背景
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // 设置顶点数组
+        gl.bindBuffer(gl.ARRAY_BUFFER, obj.buffer);
+
+        // 设置着色器
+        gl.useProgram(shaderProgram);
+
+        // 设置着色器参数：点点坐标、投影矩阵和模型视图矩阵
+        gl.vertexAttribPointer(shaderVertexPositionAttribute, obj.vertSize, gl.FLOAT, false, 0, 0);
+        gl.uniformMatrix4fv(shaderProjectionMatrixUniform, false, projectionMatrix);
+
+        // 绘制物体
+        gl.drawArrays(obj.primtype, 0, obj.nVerts);
+
+    }
+
+
+</script>
+
+</html>
